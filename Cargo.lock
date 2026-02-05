@@ -1080,6 +1080,7 @@ dependencies = [
  "clap",
  "deadpool",
  "dns-lookup",
+ "flate2",
  "flexi_logger 0.22.3",
  "hbb_common",
  "headers",
