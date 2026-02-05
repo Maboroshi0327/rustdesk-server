@@ -171,48 +171,6 @@ jobs:
             ui\SignOutput\RustDeskServer.Setup.exe
           if-no-files-found: error
 
-  # github (draft) release with all binaries
-  release:
-
-    name: Github release
-    needs: 
-      - build
-      - build-win
-    runs-on: ubuntu-24.04
-    strategy:
-      fail-fast: false
-      matrix:
-        job:
-          - { os: "linux", name: "amd64", suffix: "" }
-          - { os: "linux", name: "arm64v8", suffix: "" }
-          - { os: "linux", name: "armv7", suffix: "" }
-          - { os: "linux", name: "i386", suffix: "" }
-          #- { os: "linux", name: "amd64fb", suffix: "" }
-          - { os: "windows", name: "x86_64", suffix: "-unsigned" }
-          
-    steps:
-
-      - name: Download binaries (${{ matrix.job.os }} - ${{ matrix.job.name }})
-        uses: actions/download-artifact@v4
-        with:
-          name: binaries-${{ matrix.job.os }}-${{ matrix.job.name }}
-          path: ${{ matrix.job.name }}
-
-      - name: Exec chmod
-        run: chmod -v a+x ${{ matrix.job.name }}/*
-
-      - name: Pack files (${{ matrix.job.os }} - ${{ matrix.job.name }})
-        run: |
-          sudo apt update
-          DEBIAN_FRONTEND=noninteractive sudo apt install -y zip
-          zip ${{ matrix.job.name }}/rustdesk-server-${{ matrix.job.os }}-${{ matrix.job.name }}${{ matrix.job.suffix }}.zip ${{ matrix.job.name }}/*
-
-      - name: Create Release (${{ matrix.job.os }} - (${{ matrix.job.name }})
-        uses: softprops/action-gh-release@v1
-        with:
-          draft: true
-          files: ${{ matrix.job.name }}/rustdesk-server-${{ matrix.job.os }}-${{ matrix.job.name }}${{ matrix.job.suffix }}.zip
-            
   # docker build and push of single-arch images
   docker:
 
@@ -534,12 +492,11 @@ jobs:
           cd debian-build/${{ matrix.job.name }}/
           debuild -i -us -uc -b -a${{ matrix.job.debian_platform }}
 
-      - name: Create Release
+      - name: Upload .deb to Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           draft: true
-          token: ${{ secrets.GITHUB_TOKEN }}
           files: |
             debian-build/rustdesk-server-hbbr_*_${{ matrix.job.debian_platform }}.deb
             debian-build/rustdesk-server-hbbs_*_${{ matrix.job.debian_platform }}.deb
