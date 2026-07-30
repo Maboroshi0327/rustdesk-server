@@ -669,7 +669,7 @@ impl RendezvousServer {
                 // bytes index from left to right
                 let states_idx = i / 8;
                 let bit_idx = 7 - i % 8;
-                if elapsed < REG_TIMEOUT {
+                if i64::from(elapsed) < REG_TIMEOUT {
                     states[states_idx] |= 0x01 << bit_idx;
                 }
             }
