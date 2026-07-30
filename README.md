@@ -1,7 +1,9 @@
+# 此分支 fork 自 [lejianwen/rustdesk-server](https://github.com/lejianwen/rustdesk-server)，目的是合併 [rustdesk/rustdesk-server](https://github.com/rustdesk/rustdesk-server) 新的程式碼
+
+## ⬇️ 以下是 [lejianwen/rustdesk-server](https://github.com/lejianwen/rustdesk-server) 的 README 原文 ⬇️
+
 
 # 关于此分支
-
-
 
 [![build](https://github.com/lejianwen/rustdesk-server/actions/workflows/build.yaml/badge.svg)](https://github.com/lejianwen/rustdesk-server/actions/workflows/build.yaml)
 
